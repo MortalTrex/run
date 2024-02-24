@@ -9,17 +9,14 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-for fichier_c in "$@"; do
-  if [ ! -f "$fichier_c" ]; then
-    echo "Le fichier $fichier_c n'existe pas."
-  else
-    ${CC} ${CFLAGS} "$fichier_c" -o "${EXEC}"
+# Compilation de tous les fichiers .c fournis en entrée
+${CC} ${CFLAGS} "$@" -o "${EXEC}"
 
-    if [ $? -eq 0 ]; then
-      "./${EXEC}"
-      rm -f "${EXEC}"
-    else
-      echo "La compilation de $fichier_c a échoué."
-    fi
-  fi
-done
+if [ $? -eq 0 ]; then
+  # Exécution du programme compilé
+  "./${EXEC}"
+  # Suppression du fichier exécutable après l'exécution
+  rm -f "${EXEC}"
+else
+  echo "La compilation a échoué."
+fi
